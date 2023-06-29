@@ -2,7 +2,6 @@
 #define SINGLE_LINKED_LIST_H
 
 #include <memory>
-#include <iostream>
 
 template <typename T>
 struct Node
@@ -17,8 +16,8 @@ template <typename T>
 class SingleLinkedList
 {
 public:
-	std::shared_ptr<Node<T>>	m_head;
-	int							m_size;
+	std::shared_ptr<Node<T>>		m_head;
+	int								m_size;
 
 public:
 	SingleLinkedList();

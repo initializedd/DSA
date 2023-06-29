@@ -2,6 +2,7 @@
 #define SINGLE_LINKED_LIST_H
 
 #include <memory>
+#include <iostream>
 
 template <typename T>
 struct Node
@@ -9,7 +10,7 @@ struct Node
 	T data;
 	std::shared_ptr<Node> link;
 
-	Node() : data{}, link{} {}
+	Node() : data{}, link{nullptr} {}
 };
 
 template <typename T>
@@ -32,6 +33,7 @@ public:
 
 	T front();
 
+	void insert(T data, int index);
 	void clear();
 
 	int size();
@@ -49,6 +51,14 @@ void SingleLinkedList<T>::push_front(T data)
 {
 	std::shared_ptr<Node<T>> tmp = std::make_shared<Node<T>>();
 	tmp->data = data;
+
+	if (!m_head)
+	{
+		m_head = tmp;
+		++m_size;
+		return;
+	}
+
 	tmp->link = m_head;
 
 	m_head = tmp;
@@ -58,20 +68,18 @@ void SingleLinkedList<T>::push_front(T data)
 template <typename T>
 void SingleLinkedList<T>::push_back(T data)
 {
+	std::shared_ptr<Node<T>> tmp = std::make_shared<Node<T>>();
+	tmp->data = data;
+
 	++m_size;
 
 	if (!m_head)
 	{
-		std::shared_ptr<Node<T>> tmp = std::make_shared<Node<T>>();
-		tmp->data = data;
 		m_head = tmp;
 		return;
 	}
 
 	std::shared_ptr<Node<T>> ptr = m_head;
-
-	std::shared_ptr<Node<T>> tmp = std::make_shared<Node<T>>();
-	tmp->data = data;
 
 	while (ptr->link != nullptr)
 	{
@@ -84,11 +92,17 @@ void SingleLinkedList<T>::push_back(T data)
 template <typename T>
 void SingleLinkedList<T>::pop_front()
 {
-	if (m_size == 0)
+	if (m_size == 0 || !m_head)
 		return; // no elements
 
-	std::shared_ptr<Node<T>> ptr = m_head->link;
+	if (!m_head->link)
+	{
+		m_head = nullptr;
+		--m_size;
+		return;
+	}
 
+	std::shared_ptr<Node<T>> ptr = m_head->link;
 	m_head = nullptr;
 	m_head = ptr;
 	--m_size;
@@ -97,7 +111,7 @@ void SingleLinkedList<T>::pop_front()
 template <typename T>
 void SingleLinkedList<T>::pop_back()
 {
-	if (m_size == 0)
+	if (m_size == 0 || !m_head)
 		return; // no elements
 
 	--m_size;
@@ -124,7 +138,7 @@ void SingleLinkedList<T>::pop_back()
 template <typename T>
 bool SingleLinkedList<T>::empty()
 {
-	if (m_size > 0)
+	if (m_size > 0 || !m_head)
 		return false;
 
 	return true;
@@ -138,9 +152,43 @@ T SingleLinkedList<T>::front()
 }
 
 template <typename T>
+void SingleLinkedList<T>::insert(T data, int index)
+{
+	if (index > m_size)
+		return;
+
+	if (index == 0)
+	{
+		std::shared_ptr<Node<T>> tmp = std::make_shared<Node<T>>();
+		tmp->data = data;
+
+		if (m_head)
+			tmp->link = m_head->link;
+
+		m_head = tmp;
+		return;
+	}
+
+	std::shared_ptr<Node<T>> ptr = m_head;
+
+	while (index > 1)
+	{
+		ptr = ptr->link;
+		--index;
+	}
+
+	std::shared_ptr<Node<T>> tmp = std::make_shared<Node<T>>();
+	tmp->data = data;
+	tmp->link = ptr->link;
+
+	ptr->link = tmp;
+	++m_size;
+}
+
+template <typename T>
 void SingleLinkedList<T>::clear()
 {
-	while (m_size > 0)
+	while (m_size > 0 || m_head)
 	{
 		pop_front();
 	}

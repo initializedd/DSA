@@ -135,10 +135,10 @@ bool SingleLinkedList<T>::empty()
 template <typename T>
 std::optional<T> SingleLinkedList<T>::front()
 {
-	if (m_head)
-		return m_head->data;
+	if (!m_head)
+		return std::nullopt;
 
-	return std::nullopt;
+	return m_head->data;
 }
 
 template <typename T>
@@ -181,20 +181,6 @@ void SingleLinkedList<T>::clear()
 	while (m_size > 0)
 	{
 		pop_front();
-	}
-}
-
-template <typename T>
-void SingleLinkedList<T>::print()
-{
-	int count = 0;
-	std::shared_ptr<Node<T>> ptr = m_head;
-
-	while (ptr != nullptr)
-	{
-		std::cout << "Node #" << count << ", Data: " << ptr->data << '\n';
-		ptr = ptr->link;
-		count++;
 	}
 }
 

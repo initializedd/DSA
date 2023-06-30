@@ -1,17 +1,8 @@
 #ifndef SINGLE_LINKED_LIST_H
 #define SINGLE_LINKED_LIST_H
 
-#include <memory>
-#include <iostream>
-
-template <typename T>
-struct Node
-{
-	T data;
-	std::shared_ptr<Node> link;
-
-	Node() : data{}, link{nullptr} {}
-};
+#include "Node.h"
+#include <optional>
 
 template <typename T>
 class SingleLinkedList
@@ -31,7 +22,7 @@ public:
 
 	bool empty();
 
-	T front();
+	std::optional<T> front();
 
 	void insert(T data, int index);
 	void clear();
@@ -138,17 +129,16 @@ void SingleLinkedList<T>::pop_back()
 template <typename T>
 bool SingleLinkedList<T>::empty()
 {
-	if (m_size > 0 || !m_head)
-		return false;
-
-	return true;
+	return m_size > 0 ? false : true;
 }
 
 template <typename T>
-T SingleLinkedList<T>::front()
+std::optional<T> SingleLinkedList<T>::front()
 {
 	if (m_head)
 		return m_head->data;
+
+	return std::nullopt;
 }
 
 template <typename T>
@@ -163,7 +153,7 @@ void SingleLinkedList<T>::insert(T data, int index)
 		tmp->data = data;
 
 		if (m_head)
-			tmp->link = m_head->link;
+			tmp->link = m_head;
 
 		m_head = tmp;
 		return;
@@ -188,9 +178,23 @@ void SingleLinkedList<T>::insert(T data, int index)
 template <typename T>
 void SingleLinkedList<T>::clear()
 {
-	while (m_size > 0 || m_head)
+	while (m_size > 0)
 	{
 		pop_front();
+	}
+}
+
+template <typename T>
+void SingleLinkedList<T>::print()
+{
+	int count = 0;
+	std::shared_ptr<Node<T>> ptr = m_head;
+
+	while (ptr != nullptr)
+	{
+		std::cout << "Node #" << count << ", Data: " << ptr->data << '\n';
+		ptr = ptr->link;
+		count++;
 	}
 }
 

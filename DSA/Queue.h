@@ -8,18 +8,21 @@ template <typename T>
 class Queue
 {
 private:
-	std::shared_ptr<Node<T>>		m_head;
-	std::shared_ptr<Node<T>>		m_tail;
+	Node<T>*						m_head;
+	Node<T>*						m_tail;
 	int								m_size;
 
 public:
 	Queue();
+	~Queue();
 
 	void push(T data);
 	void pop();
 
 	std::optional<T> front();
 	std::optional<T> back();
+
+	void clear();
 
 	int size();
 };
@@ -33,9 +36,15 @@ Queue<T>::Queue()
 }
 
 template <typename T>
+Queue<T>::~Queue()
+{
+	clear();
+}
+
+template <typename T>
 void Queue<T>::push(T data)
 {
-	std::shared_ptr<Node<T>> tmp = std::make_shared<Node<T>>();
+	Node<T>* tmp = new Node<T>();
 	tmp->data = data;
 
 	++m_size;
@@ -47,9 +56,9 @@ void Queue<T>::push(T data)
 		return; // first element created
 	}
 
-	std::shared_ptr<Node<T>> ptr = m_head;
+	Node<T>* ptr = m_head;
 
-	while (ptr->link != nullptr)
+	while (ptr->link)
 	{
 		ptr = ptr->link;
 	}
@@ -68,14 +77,16 @@ void Queue<T>::pop()
 
 	if (m_head == m_tail)
 	{
+		delete m_head;
 		m_head = nullptr;
 		m_tail = nullptr;
-		return; // final element removed
+		return; // final element destroyed
 	}
 
-	std::shared_ptr<Node<T>> ptr = std::make_shared<Node<T>>();
+	Node<T>* ptr = new Node<T>();
 	ptr = m_head->link;
-	m_head = nullptr;
+
+	delete m_head;
 	m_head = ptr;
 }
 
@@ -95,6 +106,13 @@ std::optional<T> Queue<T>::back()
 		return std::nullopt;
 
 	return m_tail->data;
+}
+
+template <typename T>
+void Queue<T>::clear()
+{
+	while (m_size > 0)
+		pop();
 }
 
 template <typename T>

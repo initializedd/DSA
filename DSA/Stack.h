@@ -8,11 +8,12 @@ template <typename T>
 class Stack
 {
 private:
-	std::shared_ptr<Node<T>>		m_top;
+	Node<T>*						m_top;
 	int								m_size;
 
 public:
 	Stack();
+	~Stack();
 
 	void push(T data);
 	void pop();
@@ -34,9 +35,15 @@ Stack<T>::Stack()
 }
 
 template <typename T>
+Stack<T>::~Stack()
+{
+	clear();
+}
+
+template <typename T>
 void Stack<T>::push(T data)
 {
-	std::shared_ptr<Node<T>> tmp = std::make_shared<Node<T>>();
+	Node<T>* tmp = new Node<T>();
 	tmp->data = data;
 
 	if (m_top)
@@ -50,13 +57,20 @@ template <typename T>
 void Stack<T>::pop()
 {
 	if (!m_top)
-		return;
+		return; // no elements
 
-	std::shared_ptr<Node<T>> ptr = m_top->link;
+	Node<T>* ptr = m_top->link;
 
-	m_top = nullptr;
-	m_top = ptr;
+	delete m_top;
 	--m_size;
+
+	if (!ptr)
+	{
+		m_top = nullptr;
+		return; // stack is empty
+	}
+
+	m_top = ptr;
 }
 
 template <typename T>
@@ -78,9 +92,7 @@ template <typename T>
 void Stack<T>::clear()
 {
 	while (m_size > 0)
-	{
 		pop();
-	}
 }
 
 template <typename T>

@@ -8,11 +8,12 @@ template <typename T>
 class SingleLinkedList
 {
 public:
-	std::shared_ptr<Node<T>>		m_head;
+	Node<T>*						m_head;
 	int								m_size;
 
 public:
 	SingleLinkedList();
+	~SingleLinkedList();
 
 	void push_front(T data);
 	void push_back(T data);
@@ -38,16 +39,22 @@ SingleLinkedList<T>::SingleLinkedList()
 }
 
 template <typename T>
+SingleLinkedList<T>::~SingleLinkedList()
+{
+	clear();
+}
+
+template <typename T>
 void SingleLinkedList<T>::push_front(T data)
 {
-	std::shared_ptr<Node<T>> tmp = std::make_shared<Node<T>>();
+	Node<T>* tmp = new Node<T>();
 	tmp->data = data;
 
 	if (!m_head)
 	{
 		m_head = tmp;
 		++m_size;
-		return;
+		return; // push first element
 	}
 
 	tmp->link = m_head;
@@ -59,7 +66,7 @@ void SingleLinkedList<T>::push_front(T data)
 template <typename T>
 void SingleLinkedList<T>::push_back(T data)
 {
-	std::shared_ptr<Node<T>> tmp = std::make_shared<Node<T>>();
+	Node<T>* tmp = new Node<T>();
 	tmp->data = data;
 
 	++m_size;
@@ -67,12 +74,12 @@ void SingleLinkedList<T>::push_back(T data)
 	if (!m_head)
 	{
 		m_head = tmp;
-		return;
+		return; // push first element
 	}
 
-	std::shared_ptr<Node<T>> ptr = m_head;
+	Node<T>* ptr = m_head;
 
-	while (ptr->link != nullptr)
+	while (ptr->link)
 	{
 		ptr = ptr->link;
 	}
@@ -88,13 +95,13 @@ void SingleLinkedList<T>::pop_front()
 
 	if (!m_head->link)
 	{
+		delete m_head;
 		m_head = nullptr;
 		--m_size;
-		return;
+		return; // final element destroyed
 	}
 
-	std::shared_ptr<Node<T>> ptr = m_head->link;
-	m_head = nullptr;
+	Node<T>* ptr = m_head->link;
 	m_head = ptr;
 	--m_size;
 }
@@ -109,21 +116,22 @@ void SingleLinkedList<T>::pop_back()
 
 	if (!m_head->link)
 	{
+		delete m_head;
 		m_head = nullptr;
-		return;
+		return; // final element destroyed
 	}
 
-	std::shared_ptr<Node<T>> previous = nullptr;
-	std::shared_ptr<Node<T>> current = m_head;
+	Node<T>* previous = nullptr;
+	Node<T>* current = m_head;
 
-	while (current->link != nullptr)
+	while (current->link)
 	{
 		previous = current;
 		current = current->link;
 	}
 
 	previous->link = nullptr;
-	current = nullptr;
+	delete current;
 }
 
 template <typename T>
@@ -147,19 +155,19 @@ void SingleLinkedList<T>::insert(T data, int index)
 	if (index > m_size)
 		return;
 
+	Node<T>* tmp = new Node<T>();
+	tmp->data = data;
+
 	if (index == 0)
 	{
-		std::shared_ptr<Node<T>> tmp = std::make_shared<Node<T>>();
-		tmp->data = data;
-
 		if (m_head)
 			tmp->link = m_head;
 
 		m_head = tmp;
-		return;
+		return; // push element to front
 	}
 
-	std::shared_ptr<Node<T>> ptr = m_head;
+	Node<T>* ptr = m_head;
 
 	while (index > 1)
 	{
@@ -167,8 +175,6 @@ void SingleLinkedList<T>::insert(T data, int index)
 		--index;
 	}
 
-	std::shared_ptr<Node<T>> tmp = std::make_shared<Node<T>>();
-	tmp->data = data;
 	tmp->link = ptr->link;
 
 	ptr->link = tmp;
@@ -179,9 +185,7 @@ template <typename T>
 void SingleLinkedList<T>::clear()
 {
 	while (m_size > 0)
-	{
 		pop_front();
-	}
 }
 
 template <typename T>

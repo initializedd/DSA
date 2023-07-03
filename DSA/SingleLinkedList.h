@@ -21,14 +21,14 @@ public:
 	void pop_front();
 	void pop_back();
 
-	bool empty();
+	[[nodiscard]] bool empty() const noexcept;
 
-	std::optional<T> front();
+	[[nodiscard]] std::optional<T> front() const noexcept;
 
 	void insert(T data, int index);
 	void clear();
 
-	int size();
+	[[nodiscard]] int size() const noexcept;
 };
 
 template <typename T>
@@ -135,13 +135,13 @@ void SingleLinkedList<T>::pop_back()
 }
 
 template <typename T>
-bool SingleLinkedList<T>::empty()
+[[nodiscard]] bool SingleLinkedList<T>::empty() const noexcept
 {
 	return m_size > 0 ? false : true;
 }
 
 template <typename T>
-std::optional<T> SingleLinkedList<T>::front()
+[[nodiscard]] std::optional<T> SingleLinkedList<T>::front() const noexcept
 {
 	if (!m_head)
 		return std::nullopt;
@@ -189,7 +189,7 @@ void SingleLinkedList<T>::clear()
 }
 
 template <typename T>
-int SingleLinkedList<T>::size()
+[[nodiscard]] int SingleLinkedList<T>::size() const noexcept
 {
 	return m_size;
 }

@@ -19,12 +19,14 @@ public:
 	void push(T data);
 	void pop();
 
-	std::optional<T> front();
-	std::optional<T> back();
+	[[nodiscard]] bool empty() const noexcept;
+
+	[[nodiscard]] std::optional<T> front() const noexcept;
+	[[nodiscard]] std::optional<T> back() const noexcept;
 
 	void clear();
 
-	int size();
+	[[nodiscard]] int size() const noexcept;
 };
 
 template <typename T>
@@ -91,7 +93,13 @@ void Queue<T>::pop()
 }
 
 template <typename T>
-std::optional<T> Queue<T>::front()
+[[nodiscard]] bool Queue<T>::empty() const noexcept
+{
+	return m_size > 0 ? false : true;
+}
+
+template <typename T>
+[[nodiscard]] std::optional<T> Queue<T>::front() const noexcept
 {
 	if (!m_head)
 		return std::nullopt;
@@ -100,7 +108,7 @@ std::optional<T> Queue<T>::front()
 }
 
 template <typename T>
-std::optional<T> Queue<T>::back()
+[[nodiscard]] std::optional<T> Queue<T>::back() const noexcept
 {
 	if (!m_tail)
 		return std::nullopt;
@@ -116,7 +124,7 @@ void Queue<T>::clear()
 }
 
 template <typename T>
-int Queue<T>::size()
+[[nodiscard]] int Queue<T>::size() const noexcept
 {
 	return m_size;
 }

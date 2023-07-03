@@ -18,13 +18,13 @@ public:
 	void push(T data);
 	void pop();
 
-	bool empty();
+	[[nodiscard]] bool empty() const noexcept;
 
-	std::optional<T> top();
+	[[nodiscard]] std::optional<T> top() const noexcept;
 
 	void clear();
 
-	int size();
+	[[nodiscard]] int size() const noexcept;
 };
 
 template <typename T>
@@ -74,13 +74,13 @@ void Stack<T>::pop()
 }
 
 template <typename T>
-bool Stack<T>::empty()
+[[nodiscard]] bool Stack<T>::empty() const noexcept
 {
 	return m_size > 0 ? false : true;
 }
 
 template <typename T>
-std::optional<T> Stack<T>::top()
+[[nodiscard]] std::optional<T> Stack<T>::top() const noexcept
 {
 	if (!m_top)
 		return std::nullopt;
@@ -96,7 +96,7 @@ void Stack<T>::clear()
 }
 
 template <typename T>
-int Stack<T>::size()
+[[nodiscard]] int Stack<T>::size() const noexcept
 {
 	return m_size;
 }

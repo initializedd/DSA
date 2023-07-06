@@ -4,101 +4,141 @@
 #include "Node.h"
 #include <optional>
 
+template <typename T, std::size_t Size>
+class StaticStack
+{
+private:
+	T								m_array[Size];
+	int								m_top;
+	const int						m_capacity;
+
+public:
+	StaticStack()
+		: m_array{}
+		, m_top{ -1 }
+		, m_capacity{ Size }
+	{
+	}
+
+	void push(T data)
+	{
+		++m_top;
+
+		if (m_top < m_capacity)
+			m_array[m_top] = data;
+		else
+			--m_top; // stack is already full
+	}
+
+	void pop() noexcept
+	{
+		if (m_top >= 0)
+			--m_top;
+	}
+
+	[[nodiscard]] bool empty() const noexcept
+	{
+		return m_top >= 0 ? false : true;
+	}
+
+	[[nodiscard]] std::optional<T> top() const noexcept
+	{
+		if (m_top <= -1)
+			return std::nullopt;
+
+		return m_array[m_top];
+	}
+
+	void clear()
+	{
+		while (m_top >= 0)
+			pop();
+	}
+
+	[[nodiscard]] int size() const noexcept
+	{
+		return m_top + 1;
+	}
+
+	[[nodiscard]] int capacity() const noexcept
+	{
+		return m_capacity;
+	}
+};
+
 template <typename T>
-class Stack
+class DynamicStack
 {
 private:
 	Node<T>*						m_top;
 	int								m_size;
 
 public:
-	Stack();
-	~Stack();
-
-	void push(T data);
-	void pop();
-
-	[[nodiscard]] bool empty() const noexcept;
-
-	[[nodiscard]] std::optional<T> top() const noexcept;
-
-	void clear();
-
-	[[nodiscard]] int size() const noexcept;
-};
-
-template <typename T>
-Stack<T>::Stack()
-	: m_top{}
-	, m_size{}
-{
-}
-
-template <typename T>
-Stack<T>::~Stack()
-{
-	clear();
-}
-
-template <typename T>
-void Stack<T>::push(T data)
-{
-	Node<T>* tmp = new Node<T>();
-	tmp->data = data;
-
-	if (m_top)
-		tmp->link = m_top;
-
-	m_top = tmp;
-	++m_size;
-}
-
-template <typename T>
-void Stack<T>::pop()
-{
-	if (!m_top)
-		return; // no elements
-
-	Node<T>* ptr = m_top->link;
-
-	delete m_top;
-	--m_size;
-
-	if (!ptr)
+	DynamicStack()
+		: m_top{}
+		, m_size{}
 	{
-		m_top = nullptr;
-		return; // stack is empty
 	}
 
-	m_top = ptr;
-}
+	~DynamicStack()
+	{
+		clear();
+	}
 
-template <typename T>
-[[nodiscard]] bool Stack<T>::empty() const noexcept
-{
-	return m_size > 0 ? false : true;
-}
+	void push(T data)
+	{
+		Node<T>* tmp = new Node<T>();
+		tmp->data = data;
 
-template <typename T>
-[[nodiscard]] std::optional<T> Stack<T>::top() const noexcept
-{
-	if (!m_top)
-		return std::nullopt;
+		if (m_top)
+			tmp->link = m_top;
 
-	return m_top->data;
-}
+		m_top = tmp;
+		++m_size;
+	}
 
-template <typename T>
-void Stack<T>::clear()
-{
-	while (m_size > 0)
-		pop();
-}
+	void pop()
+	{
+		if (!m_top)
+			return; // no elements
 
-template <typename T>
-[[nodiscard]] int Stack<T>::size() const noexcept
-{
-	return m_size;
-}
+		Node<T>* ptr = m_top->link;
+
+		delete m_top;
+		--m_size;
+
+		if (!ptr)
+		{
+			m_top = nullptr;
+			return; // stack is empty
+		}
+
+		m_top = ptr;
+	}
+
+	[[nodiscard]] bool empty() const noexcept
+	{
+		return m_size > 0 ? false : true;
+	}
+
+	[[nodiscard]] std::optional<T> top() const noexcept
+	{
+		if (!m_top)
+			return std::nullopt;
+
+		return m_top->data;
+	}
+
+	void clear()
+	{
+		while (m_size > 0)
+			pop();
+	}
+
+	[[nodiscard]] int size() const noexcept
+	{
+		return m_size;
+	}
+};
 
 #endif // !STACK_H

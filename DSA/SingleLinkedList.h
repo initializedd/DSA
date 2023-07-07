@@ -12,186 +12,157 @@ public:
 	int								m_size;
 
 public:
-	SingleLinkedList();
-	~SingleLinkedList();
-
-	void push_front(T data);
-	void push_back(T data);
-
-	void pop_front();
-	void pop_back();
-
-	[[nodiscard]] bool empty() const noexcept;
-
-	[[nodiscard]] std::optional<T> front() const noexcept;
-
-	void insert(T data, int index);
-	void clear();
-
-	[[nodiscard]] int size() const noexcept;
-};
-
-template <typename T>
-SingleLinkedList<T>::SingleLinkedList()
-	: m_head{}
-	, m_size{}
-{
-}
-
-template <typename T>
-SingleLinkedList<T>::~SingleLinkedList()
-{
-	clear();
-}
-
-template <typename T>
-void SingleLinkedList<T>::push_front(T data)
-{
-	Node<T>* tmp = new Node<T>();
-	tmp->data = data;
-
-	if (!m_head)
+	SingleLinkedList()
+		: m_head{}
+		, m_size{}
 	{
+	}
+
+	~SingleLinkedList()
+	{
+		clear();
+	}
+
+	void push_front(T data)
+	{
+		Node<T>* tmp = new Node<T>();
+		tmp->data = data;
+
+		if (!m_head)
+		{
+			m_head = tmp;
+			++m_size;
+			return; // first element created
+		}
+
+		tmp->link = m_head;
+
 		m_head = tmp;
 		++m_size;
-		return; // push first element
 	}
 
-	tmp->link = m_head;
-
-	m_head = tmp;
-	++m_size;
-}
-
-template <typename T>
-void SingleLinkedList<T>::push_back(T data)
-{
-	Node<T>* tmp = new Node<T>();
-	tmp->data = data;
-
-	++m_size;
-
-	if (!m_head)
+	void push_back(T data)
 	{
-		m_head = tmp;
-		return; // push first element
+		Node<T>* tmp = new Node<T>();
+		tmp->data = data;
+
+		++m_size;
+
+		if (!m_head)
+		{
+			m_head = tmp;
+			return; // first element created
+		}
+
+		Node<T>* ptr = m_head;
+
+		while (ptr->link)
+		{
+			ptr = ptr->link;
+		}
+
+		ptr->link = tmp;
 	}
 
-	Node<T>* ptr = m_head;
-
-	while (ptr->link)
+	void pop_front()
 	{
-		ptr = ptr->link;
-	}
+		if (m_size == 0 || !m_head)
+			return; // no elements
 
-	ptr->link = tmp;
-}
+		if (!m_head->link)
+		{
+			delete m_head;
+			m_head = nullptr;
+			--m_size;
+			return; // final element destroyed
+		}
 
-template <typename T>
-void SingleLinkedList<T>::pop_front()
-{
-	if (m_size == 0 || !m_head)
-		return; // no elements
-
-	if (!m_head->link)
-	{
-		delete m_head;
-		m_head = nullptr;
+		Node<T>* ptr = m_head->link;
+		m_head = ptr;
 		--m_size;
-		return; // final element destroyed
 	}
 
-	Node<T>* ptr = m_head->link;
-	m_head = ptr;
-	--m_size;
-}
-
-template <typename T>
-void SingleLinkedList<T>::pop_back()
-{
-	if (m_size == 0 || !m_head)
-		return; // no elements
-
-	--m_size;
-
-	if (!m_head->link)
+	void pop_back()
 	{
-		delete m_head;
-		m_head = nullptr;
-		return; // final element destroyed
+		if (m_size == 0 || !m_head)
+			return; // no elements
+
+		--m_size;
+
+		if (!m_head->link)
+		{
+			delete m_head;
+			m_head = nullptr;
+			return; // final element destroyed
+		}
+
+		Node<T>* previous = nullptr;
+		Node<T>* current = m_head;
+
+		while (current->link)
+		{
+			previous = current;
+			current = current->link;
+		}
+
+		previous->link = nullptr;
+		delete current;
 	}
 
-	Node<T>* previous = nullptr;
-	Node<T>* current = m_head;
-
-	while (current->link)
+	[[nodiscard]] bool empty() const noexcept
 	{
-		previous = current;
-		current = current->link;
+		return m_size == 0 ? true : false;
 	}
 
-	previous->link = nullptr;
-	delete current;
-}
-
-template <typename T>
-[[nodiscard]] bool SingleLinkedList<T>::empty() const noexcept
-{
-	return m_size > 0 ? false : true;
-}
-
-template <typename T>
-[[nodiscard]] std::optional<T> SingleLinkedList<T>::front() const noexcept
-{
-	if (!m_head)
-		return std::nullopt;
-
-	return m_head->data;
-}
-
-template <typename T>
-void SingleLinkedList<T>::insert(T data, int index)
-{
-	if (index > m_size)
-		return;
-
-	Node<T>* tmp = new Node<T>();
-	tmp->data = data;
-
-	if (index == 0)
+	[[nodiscard]] std::optional<T> front() const noexcept
 	{
-		if (m_head)
-			tmp->link = m_head;
+		if (!m_head)
+			return std::nullopt;
 
-		m_head = tmp;
-		return; // push element to front
+		return m_head->data;
 	}
 
-	Node<T>* ptr = m_head;
-
-	while (index > 1)
+	void insert(T data, int index)
 	{
-		ptr = ptr->link;
-		--index;
+		if (index > m_size)
+			return;
+
+		Node<T>* tmp = new Node<T>();
+		tmp->data = data;
+
+		if (index == 0)
+		{
+			if (m_head)
+				tmp->link = m_head;
+
+			m_head = tmp;
+			return; // first element created
+		}
+
+		Node<T>* ptr = m_head;
+
+		while (index > 1)
+		{
+			ptr = ptr->link;
+			--index;
+		}
+
+		tmp->link = ptr->link;
+
+		ptr->link = tmp;
+		++m_size;
 	}
 
-	tmp->link = ptr->link;
+	void clear()
+	{
+		while (!empty())
+			pop_front();
+	}
 
-	ptr->link = tmp;
-	++m_size;
-}
-
-template <typename T>
-void SingleLinkedList<T>::clear()
-{
-	while (m_size > 0)
-		pop_front();
-}
-
-template <typename T>
-[[nodiscard]] int SingleLinkedList<T>::size() const noexcept
-{
-	return m_size;
-}
+	[[nodiscard]] int size() const noexcept
+	{
+		return m_size;
+	}
+};
 
 #endif // !SINGLE_LINKED_LIST_H

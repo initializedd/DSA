@@ -11,6 +11,18 @@ private:
 	BinaryNode<T>*				m_root;
 	int							m_size;
 
+	void clearRecursive(BinaryNode<T>* node)
+	{
+		if (!node)
+			return; // return to previous call when reaching leaf
+
+		clearRecursive(node->left);
+		clearRecursive(node->right);
+
+		delete node;
+		--m_size;
+	}
+
 public:
 	BinarySearchTree()
 		: m_root{}
@@ -20,7 +32,7 @@ public:
 
 	~BinarySearchTree()
 	{
-		//clear();
+		clear();
 	}
 
 	void insert(T data)
@@ -159,7 +171,7 @@ public:
 			else
 				parent->right = newPtr;
 
-			// find the left node's right leaf
+			// find the new node's right leaf
 			while (newPtr->right)
 			{
 				newPtr = newPtr->right;
@@ -168,7 +180,7 @@ public:
 			newPtr->right = ptr->right;
 
 			delete ptr;
-			return; // left node becomes root, right node becomes new root's right leaf
+			return; // node with 2 children removed
 		}
 
 		if (ptr->left)
@@ -230,6 +242,12 @@ public:
 		}
 
 		return nullptr;
+	}
+
+	void clear()
+	{
+		clearRecursive(m_root);
+		m_root = nullptr;
 	}
 
 	[[nodiscard]] int size() const noexcept

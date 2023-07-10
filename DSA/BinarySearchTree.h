@@ -14,7 +14,7 @@ private:
 	void clearRecursive(BinaryNode<T>* node)
 	{
 		if (!node)
-			return; // return to previous call when reaching leaf
+			return; // return to previous recursive call when reaching a leaf node
 
 		clearRecursive(node->left);
 		clearRecursive(node->right);
@@ -242,6 +242,32 @@ public:
 		}
 
 		return nullptr;
+	}
+
+	[[nodiscard]] std::optional<T> min() const noexcept
+	{
+		if (!m_root)
+			return std::nullopt;
+
+		BinaryNode<T>* ptr = m_root;
+
+		while (ptr->left)
+			ptr = ptr->left;
+
+		return ptr->data; // return min value
+	}
+
+	[[nodiscard]] std::optional<T> max() const noexcept
+	{
+		if (!m_root)
+			return std::nullopt;
+
+		BinaryNode<T>* ptr = m_root;
+
+		while (ptr->right)
+			ptr = ptr->right;
+
+		return ptr->data; // return max value
 	}
 
 	void clear()

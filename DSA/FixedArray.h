@@ -11,7 +11,7 @@ private:
 
 public:
 	template <typename... Args>
-	FixedArray(const Args&... args) requires(N > 0 && sizeof...(Args) == N)
+	FixedArray(const Args&... args) requires(sizeof...(Args) == N)
 	{
 		m_data = static_cast<T*>(malloc(sizeof(T) * N));
 

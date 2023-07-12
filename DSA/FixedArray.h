@@ -1,19 +1,17 @@
-#ifndef STATIC_ARRAY_H
-#define STATIC_ARRAY_H
+#ifndef FIXED_ARRAY_H
+#define FIXED_ARRAY_H
 
 #include <optional>
 
-template <typename T, std::size_t N>
-class StaticArray
+template <typename T, const std::size_t N>
+class FixedArray
 {
 private:
 	T*								m_data;
-	std::size_t						m_size;
 
 public:
 	template <typename... Args>
-	StaticArray(Args&&... args) requires(N > 0 && sizeof...(Args) == N)
-		: m_size{}
+	FixedArray(const Args&... args) requires(N > 0 && sizeof...(Args) == N)
 	{
 		m_data = static_cast<T*>(malloc(sizeof(T) * N));
 
@@ -24,11 +22,10 @@ public:
 			new(m_data + index) T{ arg };
 			
 			++index;
-			++m_size;
 		}
 	}
 
-	~StaticArray()
+	~FixedArray()
 	{
 		if (m_data)
 			free(m_data);
@@ -47,12 +44,12 @@ public:
 		if (!m_data)
 			return std::nullopt;
 
-		return *(m_data + m_size - 1);
+		return *(m_data + N - 1);
 	}
 
 	[[nodiscard]] std::size_t size() const noexcept
 	{
-		return m_size;
+		return N;
 	}
 
 	[[nodiscard]] T operator[](std::size_t index) const
@@ -61,4 +58,4 @@ public:
 	}
 };
 
-#endif // !STATIC_ARRAY_H
+#endif // !FIXED_ARRAY_H

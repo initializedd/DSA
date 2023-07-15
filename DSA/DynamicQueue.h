@@ -10,7 +10,7 @@ class DynamicQueue
 private:
 	Node<T>*						m_head;
 	Node<T>*						m_tail;
-	int								m_size;
+	std::size_t						m_size;
 
 public:
 	DynamicQueue()
@@ -25,7 +25,7 @@ public:
 		clear();
 	}
 
-	void push(T data)
+	void push(const T& data)
 	{
 		Node<T>* tmp = new Node<T>();
 		tmp->data = data;
@@ -99,7 +99,7 @@ public:
 			pop();
 	}
 
-	[[nodiscard]] int size() const noexcept
+	[[nodiscard]] std::size_t size() const noexcept
 	{
 		return m_size;
 	}

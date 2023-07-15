@@ -7,9 +7,9 @@
 template <typename T>
 class SingleLinkedList
 {
-public:
+private:
 	Node<T>*						m_head;
-	int								m_size;
+	std::size_t						m_size;
 
 public:
 	SingleLinkedList()
@@ -23,7 +23,7 @@ public:
 		clear();
 	}
 
-	void push_front(T data)
+	void push_front(const T& data)
 	{
 		Node<T>* tmp = new Node<T>();
 		tmp->data = data;
@@ -41,7 +41,7 @@ public:
 		++m_size;
 	}
 
-	void push_back(T data)
+	void push_back(const T& data)
 	{
 		Node<T>* tmp = new Node<T>();
 		tmp->data = data;
@@ -122,10 +122,10 @@ public:
 		return m_head->data;
 	}
 
-	void insert(T data, int index)
+	void insert(const T& data, std::size_t index)
 	{
 		if (index > m_size)
-			return;
+			return; // invalid index
 
 		Node<T>* tmp = new Node<T>();
 		tmp->data = data;
@@ -159,7 +159,7 @@ public:
 			pop_front();
 	}
 
-	[[nodiscard]] int size() const noexcept
+	[[nodiscard]] std::size_t size() const noexcept
 	{
 		return m_size;
 	}

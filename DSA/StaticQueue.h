@@ -3,25 +3,23 @@
 
 #include <optional>
 
-template <typename T, std::size_t Size>
+template <typename T, const std::size_t N>
 class StaticQueue
 {
 private:
-	T								m_array[Size];
+	T								m_array[N];
 	int								m_head;
 	int								m_tail;
-	const int						m_capacity;
 
 public:
 	StaticQueue()
 		: m_array{}
 		, m_head{ -1 }
 		, m_tail{ -1 }
-		, m_capacity{ Size }
 	{
 	}
 
-	void push(T data)
+	void push(const T& data)
 	{
 		if (full())
 			return;
@@ -58,7 +56,7 @@ public:
 
 	[[nodiscard]] bool full() const noexcept
 	{
-		return m_tail + 1 == m_capacity ? true : false;
+		return m_tail + 1 == N ? true : false;
 	}
 
 	[[nodiscard]] std::optional<T> front() const noexcept
@@ -83,17 +81,17 @@ public:
 			pop();
 	}
 
-	[[nodiscard]] int size() const noexcept
+	[[nodiscard]] std::size_t size() const noexcept
 	{
 		return m_tail + 1;
 	}
 
-	[[nodiscard]] int capacity() const noexcept
+	[[nodiscard]] consteval std::size_t capacity() const noexcept
 	{
-		return m_capacity;
+		return N;
 	}
 
-	[[nodiscard]] T operator[](std::size_t index) const
+	[[nodiscard]] T& operator[](std::size_t index) const
 	{
 		return m_array[m_head + index];
 	}

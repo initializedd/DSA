@@ -15,7 +15,7 @@ private:
 	std::size_t								m_size;
 	std::size_t								m_max_size;
 
-	[[nodiscard]] unsigned int hash(const std::string& key) const noexcept
+	[[nodiscard]] std::size_t hash(const std::string& key) const noexcept
 	{
 		unsigned int sum = 0;
 
@@ -27,7 +27,7 @@ private:
 		return sum % m_max_size;
 	}
 
-	[[nodiscard]] unsigned int hash(const int key) const noexcept
+	[[nodiscard]] std::size_t hash(const int key) const noexcept
 	{
 		return key % m_max_size;
 	}

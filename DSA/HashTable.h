@@ -1,41 +1,33 @@
 #ifndef HASH_TABLE_H
 #define HASH_TABLE_H
 
+#include "Node.h"
 #include <string>
 #include <vector>
 #include <utility>
 #include <optional>
 
 template <typename T, typename U>
-struct PairNode
-{
-	std::pair<T, U>			data;
-	PairNode*				link;
-
-	PairNode() : data{}, link{} {}
-};
-
-template <typename T, typename U>
 class HashTable
 {
 private:
-	std::vector<PairNode<T, U>*>			m_bucket;
+	std::vector<Node<std::pair<T, U>>*>		m_buckets;
 	std::size_t								m_size;
 	std::size_t								m_max_size;
 
-	[[nodiscard]] int hash(const std::string& key) const noexcept
+	[[nodiscard]] unsigned int hash(const std::string& key) const noexcept
 	{
-		int sum = 0;
+		unsigned int sum = 0;
 
-		for (int i = 0; i < key.length(); ++i)
+		for (const auto& ch : key)
 		{
-			sum += key[i];
+			sum += ch;
 		}
 
 		return sum % m_max_size;
 	}
 
-	[[nodiscard]] int hash(const int key) const noexcept
+	[[nodiscard]] unsigned int hash(const int key) const noexcept
 	{
 		return key % m_max_size;
 	}
@@ -46,73 +38,151 @@ public:
 		, m_max_size{}
 	{
 		std::size_t size = args.size();
-		m_size = size;
 		m_max_size = size * 2;
 
-		m_bucket.resize(m_max_size);
+		m_buckets.resize(m_max_size);
 
-		for (auto pair : args) 
+		for (const auto& pair : args)
 		{
 			insert(pair);
 		}
 	}
 
-	void insert(std::pair<T, U>& pair)
+	~HashTable()
 	{
-		PairNode<T, U>* tmp = new PairNode<T, U>();
+		clear();
+	}
+
+	void insert(const std::pair<T, U>& pair)
+	{
+		Node<std::pair<T, U>>* tmp = new Node<std::pair<T, U>>();
 		tmp->data.first = pair.first;
 		tmp->data.second = pair.second;
 
 		std::size_t index = hash(pair.first);
-		
-		PairNode<T, U>* ptr = m_bucket[index];
 
-		if (!ptr)
+		Node<std::pair<T, U>>* bucket = m_buckets[index];
+
+		if (!bucket)
 		{
-			m_bucket[index] = tmp;
-			return; // insert first element
+			m_buckets[index] = tmp;
+			++m_size;
+
+			return; // insert first bucket at this index
 		}
 
-		// Collision
-		while (ptr->link)
+		Node<std::pair<T, U>>* previous = nullptr;
+
+		// handle collision
+		while (bucket)
 		{
-			ptr = ptr->link;
+			if (bucket->data.first == pair.first)
+			{
+				bucket->data.second = pair.second;
+				return; // overwrite data if same key
+			}
+
+			previous = bucket;
+			bucket = bucket->link;
 		}
-			
-		ptr->link = tmp;
+
+		// insert new bucket at end of list
+		previous->link = tmp;
+		++m_size;
 	}
 
-	[[nodiscard]] std::optional<U> find(const T& key)
+	void remove(const T& key)
 	{
-		PairNode<T, U>* result = m_bucket[hash(key)];
+		std::size_t index = hash(key);
 
-		while (result && result->data.first != key)
+		Node<std::pair<T, U>>* previous = nullptr;
+		Node<std::pair<T, U>>* bucket = m_buckets[index];
+
+		while (bucket && bucket->data.first != key)
 		{
-			result = result->link;
+			previous = bucket;
+			bucket = bucket->link;
 		}
 
-		if (!result)
-			return std::nullopt;
+		if (!bucket)
+			return; // key not found
 
-		return result->data.second;
+		if (!previous)
+		{
+			m_buckets[index] = bucket->link; // remove first bucket at this index
+		}
+		else
+		{
+			previous->link = bucket->link; // remove bucket
+		}
+
+		delete bucket;
+		--m_size;
 	}
 
-	/*bool contains(const T& key)
+	[[nodiscard]] std::optional<U> find(const T& key) const
 	{
-		
-	}*/
+		Node<std::pair<T, U>>* bucket = m_buckets[hash(key)];
 
-	/*void clear()
+		while (bucket)
+		{
+			if (bucket->data.first == key)
+				return bucket->data.second;
+
+			bucket = bucket->link;
+		}
+
+		return std::nullopt;
+	}
+
+	[[nodiscard]] bool contains(const T& key) const noexcept
 	{
+		for (const auto* bucket : m_buckets)
+		{
+			while (bucket)
+			{
+				if (bucket->data.first == key)
+					return true; // bucket found
 
-	}*/
+				bucket = bucket->link;
+			}
+		}
 
-	[[nodiscard]] int size() const noexcept
+		return false;
+	}
+
+	[[nodiscard]] bool empty() const noexcept
+	{
+		return m_size == 0 ? true : false;
+	}
+
+	void clear()
+	{
+		if (!empty())
+		{
+			for (auto& bucket : m_buckets)
+			{
+				while (bucket)
+				{
+					Node<std::pair<T, U>>* next = bucket->link;
+
+					delete bucket;
+					bucket = next;
+
+					--m_size;
+				}
+
+				bucket = nullptr;
+			}
+		}
+	}
+
+	[[nodiscard]] std::size_t size() const noexcept
 	{
 		return m_size;
 	}
 
-	[[nodiscard]] int max_size() const noexcept
+	[[nodiscard]] std::size_t max_size() const noexcept
 	{
 		return m_max_size;
 	}

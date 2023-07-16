@@ -32,10 +32,55 @@ private:
 		return key % m_max_size;
 	}
 
+	void re_hash()
+	{
+		std::vector<Node<std::pair<T, U>>*> old_buckets = m_buckets;
+
+		m_buckets.clear();
+
+		m_max_size = m_size * 2;
+		m_buckets.resize(m_max_size);
+
+		for (auto* bucket : old_buckets)
+		{
+			while (bucket)
+			{
+				Node<std::pair<T, U>>* next = bucket->link;
+				bucket->link = nullptr;  // clear the link of the old bucket
+
+				std::size_t index = hash(bucket->data.first);
+
+				if (!m_buckets[index])
+				{
+					m_buckets[index] = bucket; // insert first bucket at this index
+				}
+				else
+				{
+					Node<std::pair<T, U>>* ptr = m_buckets[index];
+
+					while (ptr->link)
+					{
+						ptr = ptr->link;
+					}
+					
+					ptr->link = bucket;
+				}
+
+				bucket = next; // iterate to the next linked node
+			}
+		}
+	}
+
 public:
+	HashTable()
+		: m_size{}
+		, m_max_size{ 13 }
+	{
+		m_buckets.resize(m_max_size);
+	}
+
 	HashTable(const std::initializer_list<std::pair<T, U>>& args)
 		: m_size{}
-		, m_max_size{}
 	{
 		std::size_t size = args.size();
 		m_max_size = size * 2;
@@ -55,6 +100,9 @@ public:
 
 	void insert(const std::pair<T, U>& pair)
 	{
+		if (m_max_size < m_size * 1.3)
+			re_hash();
+
 		Node<std::pair<T, U>>* tmp = new Node<std::pair<T, U>>();
 		tmp->data.first = pair.first;
 		tmp->data.second = pair.second;

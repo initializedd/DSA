@@ -18,6 +18,14 @@ public:
 	{
 	}
 
+	template <typename... Args>
+	SingleLinkedList(const Args&... args) requires(std::is_same_v<Args, T> && ...)
+		: m_head{}
+		, m_size{}
+	{
+		(push_back({ args }), ...);
+	}
+
 	~SingleLinkedList()
 	{
 		clear();

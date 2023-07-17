@@ -10,6 +10,11 @@ private:
 	T*								m_data;
 
 public:
+	FixedArray()
+	{
+		m_data = static_cast<T*>(malloc(sizeof(T) * N));
+	}
+
 	template <typename... Args>
 	FixedArray(const Args&... args) requires((std::is_same_v<Args, T> && ...) && sizeof...(Args) == N)
 	{

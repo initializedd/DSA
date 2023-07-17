@@ -20,6 +20,15 @@ public:
 	{
 	}
 
+	template <typename... Args>
+	DynamicQueue(const Args&... args) requires(std::is_same_v<Args, T> && ...)
+		: m_head{}
+		, m_tail{}
+		, m_size{}
+	{
+		(push({ args }), ...);
+	}
+
 	~DynamicQueue()
 	{
 		clear();

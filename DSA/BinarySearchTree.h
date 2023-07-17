@@ -30,6 +30,14 @@ public:
 	{
 	}
 
+	template <typename... Args>
+	BinarySearchTree(const Args&... args) requires(std::is_same_v<Args, T> && ...)
+		: m_root{}
+		, m_size{}
+	{
+		(insert({ args }), ...);
+	}
+
 	~BinarySearchTree()
 	{
 		clear();

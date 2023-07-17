@@ -18,6 +18,14 @@ public:
 	{
 	}
 
+	template <typename... Args>
+	DynamicStack(const Args&... args) requires(std::is_same_v<Args, T> && ...)
+		: m_top{}
+		, m_size{}
+	{
+		(push({ args }), ...);
+	}
+
 	~DynamicStack()
 	{
 		clear();

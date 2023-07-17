@@ -17,6 +17,14 @@ public:
 	{
 	}
 
+	template <typename... Args>
+	StaticStack(const Args&... args) requires((std::is_same_v<Args, T> && ...) && sizeof...(Args) <= N)
+		: m_array{}
+		, m_top{-1}
+	{
+		(push({ args }), ...);
+	}
+
 	void push(T data)
 	{
 		++m_top;

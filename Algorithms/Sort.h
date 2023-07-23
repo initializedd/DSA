@@ -1,6 +1,9 @@
 #ifndef SORT_H
 #define SORT_H
 
+#include <cstddef>
+#include <cstdint>
+
 template <typename T, typename Compare>
 constexpr void insertion_sort(T* const arr, const size_t size, const Compare comp)
 {
@@ -28,10 +31,10 @@ constexpr void merge_sort(T* const arr, const size_t left_index, const size_t ri
 	merge_sort(arr, left_index, q, comp); // beginning - middle of arr
 	merge_sort(arr, q + 1, right_index, comp); // middle - end of arr
 
-	[](T* const arr, const size_t left, const size_t mid, const size_t right, const Compare comp)
+	[&arr, left_index, right_index, &comp](const size_t mid)
 	{
-		const auto n1 = mid - left + 1;
-		const auto n2 = right - mid;
+		const auto n1 = mid - left_index + 1;
+		const auto n2 = right_index - mid;
 
 		// create temp arrays
 		T* const left_arr = new T[n1];
@@ -39,14 +42,14 @@ constexpr void merge_sort(T* const arr, const size_t left_index, const size_t ri
 
 		// copy data to temp left array
 		for (auto i = 0; i < n1; ++i)
-			left_arr[i] = arr[left + i];
+			left_arr[i] = arr[left_index + i];
 
 		// copy data to temp right array
 		for (auto j = 0; j < n2; ++j)
 			right_arr[j] = arr[mid + 1 + j];
 
 		auto i = 0, j = 0;
-		auto k = left;
+		auto k = left_index;
 
 		// merge the temp arrays back into arr[left..right]
 		while (i < n1 && j < n2)
@@ -67,7 +70,39 @@ constexpr void merge_sort(T* const arr, const size_t left_index, const size_t ri
 
 		delete[] left_arr;
 		delete[] right_arr;
-	}(arr, left_index, q, right_index, comp);
+	}(q);
+}
+
+template <typename T, typename Compare>
+constexpr void quick_sort(T* const arr, const int64_t left_index, const int64_t right_index, const Compare comp)
+{
+    if (left_index >= right_index)
+        return;
+        
+       auto pivot = [&arr, left_index, right_index, &comp]() -> int64_t
+       {
+           auto i = left_index - 1;
+           auto pivot = arr[right_index];
+
+           for (auto j = left_index; j < right_index; ++j)
+           {
+               if (comp(arr[j], pivot))
+               {
+                   T temp = arr[++i];
+                   arr[i] = arr[j];
+                   arr[j] = temp;
+               }
+           }
+
+           T temp = arr[++i];
+           arr[i] = arr[right_index];
+           arr[right_index] = temp;
+
+           return i;
+       }();
+    
+       quick_sort(arr, left_index, pivot - 1, comp);
+       quick_sort(arr, pivot + 1, right_index, comp);
 }
 
 #endif // !SORT_H

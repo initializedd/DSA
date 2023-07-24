@@ -9,7 +9,7 @@ class DynamicStack
 {
 private:
 	Node<T>*						m_top;
-	size_t							m_size;
+    std::size_t						m_size;
 
 public:
 	DynamicStack()
@@ -81,7 +81,7 @@ public:
 			pop();
 	}
 
-	[[nodiscard]] size_t size() const noexcept
+	[[nodiscard]] std::size_t size() const noexcept
 	{
 		return m_size;
 	}

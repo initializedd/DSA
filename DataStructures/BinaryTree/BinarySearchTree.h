@@ -9,7 +9,7 @@ class BinarySearchTree
 {
 private:
 	BinaryNode<T>*				m_root;
-	size_t						m_size;
+    std::size_t					m_size;
 
 	void clearRecursive(BinaryNode<T>* node)
 	{
@@ -284,7 +284,7 @@ public:
 		m_root = nullptr;
 	}
 
-	[[nodiscard]] size_t size() const noexcept
+	[[nodiscard]] std::size_t size() const noexcept
 	{
 		return m_size;
 	}

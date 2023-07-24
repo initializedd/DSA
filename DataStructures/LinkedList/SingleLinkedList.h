@@ -9,7 +9,7 @@ class SingleLinkedList
 {
 private:
 	Node<T>*						m_head;
-	size_t							m_size;
+    std::size_t						m_size;
 
 public:
 	SingleLinkedList()
@@ -130,7 +130,7 @@ public:
 		return m_head->data;
 	}
 
-	void insert(const T& data, size_t index)
+	void insert(const T& data, std::size_t index)
 	{
 		if (index > m_size)
 			return; // invalid index
@@ -167,7 +167,7 @@ public:
 			pop_front();
 	}
 
-	[[nodiscard]] size_t size() const noexcept
+	[[nodiscard]] std::size_t size() const noexcept
 	{
 		return m_size;
 	}

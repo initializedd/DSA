@@ -10,7 +10,7 @@ class DynamicQueue
 private:
 	Node<T>*						m_head;
 	Node<T>*						m_tail;
-	size_t							m_size;
+    std::size_t						m_size;
 
 public:
 	DynamicQueue()
@@ -108,7 +108,7 @@ public:
 			pop();
 	}
 
-	[[nodiscard]] size_t size() const noexcept
+	[[nodiscard]] std::size_t size() const noexcept
 	{
 		return m_size;
 	}

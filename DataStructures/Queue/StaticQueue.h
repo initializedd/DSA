@@ -3,7 +3,7 @@
 
 #include <optional>
 
-template <typename T, const size_t N>
+template <typename T, const std::size_t N>
 class StaticQueue
 {
 private:
@@ -90,17 +90,17 @@ public:
 			pop();
 	}
 
-	[[nodiscard]] size_t size() const noexcept
+	[[nodiscard]] std::size_t size() const noexcept
 	{
 		return m_tail + 1;
 	}
 
-	[[nodiscard]] consteval size_t capacity() const noexcept
+	[[nodiscard]] consteval std::size_t capacity() const noexcept
 	{
 		return N;
 	}
 
-	[[nodiscard]] T& operator[](size_t index) const
+	[[nodiscard]] T& operator[](std::size_t index) const
 	{
 		return m_array[m_head + index];
 	}

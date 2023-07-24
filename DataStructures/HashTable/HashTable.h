@@ -12,10 +12,10 @@ class HashTable
 {
 private:
 	std::vector<Node<std::pair<T, U>>*>		m_buckets;
-	size_t									m_size;
-	size_t									m_max_size;
+    std::size_t								m_size;
+    std::size_t								m_max_size;
 
-	[[nodiscard]] size_t hash(const std::string& key) const noexcept
+	[[nodiscard]] std::size_t hash(const std::string& key) const noexcept
 	{
 		unsigned int sum = 0;
 
@@ -27,7 +27,7 @@ private:
 		return sum % m_max_size;
 	}
 
-	[[nodiscard]] size_t hash(const int key) const noexcept
+	[[nodiscard]] std::size_t hash(const int key) const noexcept
 	{
 		return key % m_max_size;
 	}
@@ -48,7 +48,7 @@ private:
 				Node<std::pair<T, U>>* next = bucket->link;
 				bucket->link = nullptr;  // clear the link of the old bucket
 
-				size_t index = hash(bucket->data.first);
+                std::size_t index = hash(bucket->data.first);
 
 				if (!m_buckets[index])
 				{
@@ -82,7 +82,7 @@ public:
 	HashTable(const std::initializer_list<std::pair<T, U>>& args)
 		: m_size{}
 	{
-		size_t size = args.size();
+        std::size_t size = args.size();
 		m_max_size = size * 2;
 
 		m_buckets.resize(m_max_size);
@@ -107,7 +107,7 @@ public:
 		tmp->data.first = pair.first;
 		tmp->data.second = pair.second;
 
-		size_t index = hash(pair.first);
+        std::size_t index = hash(pair.first);
 
 		Node<std::pair<T, U>>* bucket = m_buckets[index];
 
@@ -141,7 +141,7 @@ public:
 
 	void remove(const T& key)
 	{
-		size_t index = hash(key);
+        std::size_t index = hash(key);
 
 		Node<std::pair<T, U>>* previous = nullptr;
 		Node<std::pair<T, U>>* bucket = m_buckets[index];
@@ -225,12 +225,12 @@ public:
 		}
 	}
 
-	[[nodiscard]] size_t size() const noexcept
+	[[nodiscard]] std::size_t size() const noexcept
 	{
 		return m_size;
 	}
 
-	[[nodiscard]] size_t max_size() const noexcept
+	[[nodiscard]] std::size_t max_size() const noexcept
 	{
 		return m_max_size;
 	}

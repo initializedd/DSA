@@ -7,12 +7,15 @@
 template <typename T, typename Compare>
 constexpr void insertion_sort(T* const arr, const size_t size, const Compare comp)
 {
+	if (size <= 1)
+		return; // already sorted
+
 	for (auto i = 1; i < size; ++i)
 	{
 		const T key = arr[i];
 		auto j = i - 1;
 
-		while (j >= 0 && !comp(arr[j], key))
+		while (j >= 0 && comp(key, arr[j]))
 		{
 			arr[j + 1] = arr[j];
 			arr[j--] = key;
@@ -71,6 +74,62 @@ constexpr void merge_sort(T* const arr, const size_t left_index, const size_t ri
 		delete[] left_arr;
 		delete[] right_arr;
 	}(q);
+}
+
+template <typename T, typename Compare>
+constexpr void selection_sort(T* const arr, const size_t size, const Compare comp)
+{
+	if (size <= 1)
+		return; // already sorted
+
+	auto min = 0;
+
+	for (auto i = 0; i < size; ++i)
+	{
+		min = i;
+
+		for (auto j = i + 1; j < size; ++j)
+		{
+			if (comp(arr[j], arr[min]))
+				min = j;
+		}
+
+		if (min != i)
+		{
+			const T temp = arr[min];
+
+			arr[min] = arr[i];
+			arr[i] = temp;
+		}
+	}
+}
+
+template <typename T, typename Compare>
+constexpr void bubble_sort(T* const arr, const size_t size, const Compare comp)
+{
+	if (size <= 1)
+		return; // already sorted
+
+	bool swapped = false;
+
+	for (auto i = 0; i < size; ++i)
+	{
+		for (auto j = 0; j < size - i - 1; ++j)
+		{
+			if (comp(arr[j + 1], arr[j]))
+			{
+				const T temp = arr[j];
+
+				arr[j] = arr[j + 1];
+				arr[j + 1] = temp;
+
+				swapped = true;
+			}
+		}
+
+		if (!swapped)
+			break; // no elements were swapped
+	}
 }
 
 template <typename T, typename Compare>

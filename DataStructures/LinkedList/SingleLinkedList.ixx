@@ -1,10 +1,8 @@
-#ifndef SINGLE_LINKED_LIST_H
-#define SINGLE_LINKED_LIST_H
+export module SingleLinkedList;
+import Node;
+import std;
 
-#include "../Node/Node.h"
-#include <optional>
-
-template <typename T>
+export template <typename T>
 class SingleLinkedList
 {
 private:
@@ -172,5 +170,3 @@ public:
 		return m_size;
 	}
 };
-
-#endif // !SINGLE_LINKED_LIST_H

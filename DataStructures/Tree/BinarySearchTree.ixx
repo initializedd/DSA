@@ -1,10 +1,8 @@
-#ifndef BINARY_SEARCH_TREE_H
-#define BINARY_SEARCH_TREE_H
+export module BinarySearchTree;
+import BinaryNode;
+import std;
 
-#include "../Node/BinaryNode.h"
-#include <optional>
-
-template <typename T>
+export template <typename T>
 class BinarySearchTree
 {
 private:
@@ -288,7 +286,4 @@ public:
 	{
 		return m_size;
 	}
-
 };
-
-#endif // !BINARY_SEARCH_TREE_H

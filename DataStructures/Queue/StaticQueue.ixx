@@ -1,15 +1,13 @@
-#ifndef STATIC_QUEUE_H
-#define STATIC_QUEUE_H
+export module StaticQueue;
+import std;
 
-#include <optional>
-
-template <typename T, const std::size_t N>
+export template <typename T, const std::size_t N>
 class StaticQueue
 {
 private:
 	T								m_array[N];
-	int								m_head;
-	int								m_tail;
+	std::int64_t					m_head;
+	std::int64_t					m_tail;
 
 public:
 	StaticQueue()
@@ -92,7 +90,10 @@ public:
 
 	[[nodiscard]] std::size_t size() const noexcept
 	{
-		return m_tail + 1;
+		if (empty())
+			return 0;
+
+		return m_tail - m_head + 1;
 	}
 
 	[[nodiscard]] consteval std::size_t capacity() const noexcept
@@ -105,5 +106,3 @@ public:
 		return m_array[m_head + index];
 	}
 };
-
-#endif // !STATIC_QUEUE_H

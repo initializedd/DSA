@@ -1,10 +1,7 @@
-#ifndef FIXED_ARRAY_H
-#define FIXED_ARRAY_H
+export module FixedArray;
+import std;
 
-#include <cstdlib>
-#include <optional>
-
-template <typename T, const std::size_t N>
+export template <typename T, const std::size_t N>
 class FixedArray
 {
 private:
@@ -29,7 +26,7 @@ public:
 	~FixedArray()
 	{
 		if (m_data)
-			free(m_data);
+			std::free(m_data);
 	}
 
 	void insert(const T& data, std::size_t index)
@@ -64,5 +61,3 @@ public:
 		return *(m_data + index);
 	}
 };
-
-#endif // !FIXED_ARRAY_H

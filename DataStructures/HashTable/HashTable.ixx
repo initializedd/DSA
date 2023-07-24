@@ -1,13 +1,8 @@
-#ifndef HASH_TABLE_H
-#define HASH_TABLE_H
+export module HashTable;
+import Node;
+import std;
 
-#include "../Node/Node.h"
-#include <string>
-#include <vector>
-#include <utility>
-#include <optional>
-
-template <typename T, typename U>
+export template <typename T, typename U>
 class HashTable
 {
 private:
@@ -235,5 +230,3 @@ public:
 		return m_max_size;
 	}
 };
-
-#endif // !HASH_TABLE_H

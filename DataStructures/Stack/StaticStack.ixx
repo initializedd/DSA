@@ -1,9 +1,7 @@
-#ifndef STATIC_STACK_H
-#define STATIC_STACK_H
+export module StaticStack;
+import std;
 
-#include <optional>
-
-template <typename T, const std::size_t N>
+export template <typename T, const std::size_t N>
 class StaticStack
 {
 private:
@@ -80,5 +78,3 @@ public:
 		return m_array[index];
 	}
 };
-
-#endif // !STATIC_STACK_H

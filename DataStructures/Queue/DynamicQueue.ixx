@@ -1,10 +1,8 @@
-#ifndef DYNAMIC_QUEUE_H
-#define DYNAMIC_QUEUE_H
+export module DynamicQueue;
+import Node;
+import std;
 
-#include "../Node/Node.h"
-#include <optional>
-
-template <typename T>
+export template <typename T>
 class DynamicQueue
 {
 private:
@@ -113,5 +111,3 @@ public:
 		return m_size;
 	}
 };
-
-#endif // !DYNAMIC_QUEUE_H

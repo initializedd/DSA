@@ -37,6 +37,24 @@ target_sources(${PROJECT_NAME} PRIVATE
      "Algorithms/Sort/QuickSort.ixx"
 )
 
+# add data structure modules  
+target_sources(${PROJECT_NAME} PRIVATE
+    FILE_SET CXX_MODULES
+    BASE_DIRS
+     ${PROJECT_SOURCE_DIR}
+    FILES
+     "DataStructures/Node/Node.ixx"
+     "DataStructures/Node/BinaryNode.ixx"
+     "DataStructures/LinkedList/SingleLinkedList.ixx"
+     "DataStructures/Stack/StaticStack.ixx"
+     "DataStructures/Stack/DynamicStack.ixx"
+     "DataStructures/Queue/StaticQueue.ixx"
+     "DataStructures/Queue/DynamicQueue.ixx"
+     "DataStructures/Tree/BinarySearchTree.ixx"
+     "DataStructures/HashTable/HashTable.ixx"
+     "DataStructures/Array/FixedArray.ixx"
+)
+
 # add tests
 target_sources(${PROJECT_NAME} PRIVATE
      "Tests/Main.cpp"

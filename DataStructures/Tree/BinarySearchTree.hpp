@@ -1,8 +1,12 @@
-export module BinarySearchTree;
-import BinaryNode;
-import std;
+#ifndef BINARY_SEARCH_TREE_HPP
+#define BINARY_SEARCH_TREE_HPP
 
-export template <typename T>
+#include "../Node/BinaryNode.hpp"
+#include <cstddef>
+#include <type_traits>
+#include <optional>
+
+template <typename T>
 class BinarySearchTree
 {
 private:

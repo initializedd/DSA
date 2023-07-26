@@ -1,7 +1,11 @@
-export module StaticQueue;
-import std;
+#ifndef STATIC_QUEUE_HPP
+#define STATIC_QUEUE_HPP
 
-export template <typename T, const std::size_t N>
+#include <cstddef>
+#include <type_traits>
+#include <optional>
+
+template <typename T, const std::size_t N>
 class StaticQueue
 {
 private:
@@ -106,3 +110,5 @@ public:
 		return m_array[m_head + index];
 	}
 };
+
+#endif // !STATIC_QUEUE_HPP

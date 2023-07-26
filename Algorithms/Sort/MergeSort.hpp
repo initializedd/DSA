@@ -1,7 +1,9 @@
-export module MergeSort;
-import std;
+#ifndef MERGE_SORT_HPP
+#define MERGE_SORT_HPP
 
-export template <typename T, typename Compare>
+#include <cstddef>
+
+template <typename T, typename Compare>
 constexpr void merge_sort(T* const arr, const std::size_t left_index, const std::size_t right_index, const Compare comp)
 {
 	if (left_index >= right_index)
@@ -53,3 +55,5 @@ constexpr void merge_sort(T* const arr, const std::size_t left_index, const std:
 		delete[] right_arr;
 	}(q);
 }
+
+#endif // !MERGE_SORT_HPP

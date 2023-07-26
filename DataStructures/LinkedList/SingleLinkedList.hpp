@@ -1,8 +1,11 @@
-export module SingleLinkedList;
-import Node;
-import std;
+#ifndef SINGLE_LINKED_LIST_HPP
+#define SINGLE_LINKED_LIST_HPP
 
-export template <typename T>
+#include "../Node/Node.hpp"
+#include <cstddef>
+#include <type_traits>
+
+template <typename T>
 class SingleLinkedList
 {
 private:
@@ -21,7 +24,7 @@ public:
 		: m_head{}
 		, m_size{}
 	{
-		(push_back({ args }), ...);
+		(push_front({ args }), ...);
 	}
 
 	~SingleLinkedList()
@@ -170,3 +173,5 @@ public:
 		return m_size;
 	}
 };
+
+#endif // !SINGLE_LINKED_LIST_HPP

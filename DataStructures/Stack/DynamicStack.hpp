@@ -1,8 +1,12 @@
-export module DynamicStack;
-import Node;
-import std;
+#ifndef DYNAMIC_STACK_HPP
+#define DYNAMIC_STACK_HPP
 
-export template <typename T>
+#include "../Node/Node.hpp"
+#include <cstddef>
+#include <type_traits>
+#include <optional>
+
+template <typename T>
 class DynamicStack
 {
 private:

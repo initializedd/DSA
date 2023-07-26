@@ -1,8 +1,11 @@
-export module DynamicQueue;
-import Node;
-import std;
+#ifndef DYNAMIC_QUEUE_HPP
+#define DYNAMIC_QUEUE_HPP
 
-export template <typename T>
+#include "../Node/Node.hpp"
+#include <cstddef>
+#include <optional>
+
+template <typename T>
 class DynamicQueue
 {
 private:

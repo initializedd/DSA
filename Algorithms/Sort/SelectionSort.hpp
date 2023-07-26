@@ -1,7 +1,9 @@
-export module SelectionSort;
-import std;
+#ifndef SELECTION_SORT_HPP
+#define SELECTION_SORT_HPP
 
-export template <typename T, typename Compare>
+#include <cstddef>
+
+template <typename T, typename Compare>
 constexpr void selection_sort(T* const arr, const std::size_t size, const Compare comp)
 {
 	if (size <= 1)
@@ -28,3 +30,5 @@ constexpr void selection_sort(T* const arr, const std::size_t size, const Compar
 		}
 	}
 }
+
+#endif // !SELECTION_SORT_HPP

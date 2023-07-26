@@ -1,11 +1,14 @@
-export module FixedArray;
-import std;
+#ifndef FIXED_ARRAY_HPP
+#define FIXED_ARRAY_HPP
 
-export template <typename T, const std::size_t N>
+#include <cstdlib>
+#include <type_traits>
+
+template <typename T, const std::size_t N>
 class FixedArray
 {
 private:
-	T*								m_data;
+	T*				m_data;
 
 public:
 	FixedArray()
@@ -35,19 +38,13 @@ public:
 			new(m_data + index) T{ data };
 	}
 
-	[[nodiscard]] std::optional<T> front() const noexcept
+	[[nodiscard]] T front() const noexcept
 	{
-		if (!m_data)
-			return std::nullopt;
-
 		return *m_data;
 	}
 
-	[[nodiscard]] std::optional<T> back() const noexcept
+	[[nodiscard]] T back() const noexcept
 	{
-		if (!m_data)
-			return std::nullopt;
-
 		return *(m_data + N - 1);
 	}
 
@@ -61,3 +58,5 @@ public:
 		return *(m_data + index);
 	}
 };
+
+#endif // !FIXED_ARRAY_HPP

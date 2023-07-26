@@ -1,7 +1,9 @@
-export module QuickSort;
-import std;
+#ifndef QUICK_SORT_HPP
+#define QUICK_SORT_HPP
 
-export template <typename T, typename Compare>
+#include <cstdint>
+
+template <typename T, typename Compare>
 constexpr void quick_sort(T* const arr, const std::int64_t left_index, const std::int64_t right_index, const Compare comp)
 {
     if (left_index >= right_index)
@@ -32,3 +34,5 @@ constexpr void quick_sort(T* const arr, const std::int64_t left_index, const std
     quick_sort(arr, left_index, pivot - 1, comp);
     quick_sort(arr, pivot + 1, right_index, comp);
 }
+
+#endif // !QUICK_SORT_HPP

@@ -1,7 +1,9 @@
-export module InsertionSort;
-import std;
+#ifndef INSERTION_SORT_HPP
+#define INSERTION_SORT_HPP
 
-export template <typename T, typename Compare>
+#include <cstddef>
+
+template <typename T, typename Compare>
 constexpr void insertion_sort(T* const arr, const std::size_t size, const Compare comp)
 {
 	if (size <= 1)
@@ -19,3 +21,5 @@ constexpr void insertion_sort(T* const arr, const std::size_t size, const Compar
 		}
 	}
 }
+
+#endif // !INSERTION_SORT_HPP

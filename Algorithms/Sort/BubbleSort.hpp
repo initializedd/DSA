@@ -1,7 +1,9 @@
-export module BubbleSort;
-import std;
+#ifndef BUBBLE_SORT_HPP
+#define BUBBLE_SORT_HPP
 
-export template <typename T, typename Compare>
+#include <cstddef>
+
+template <typename T, typename Compare>
 constexpr void bubble_sort(T* const arr, const std::size_t size, const Compare comp)
 {
 	if (size <= 1)
@@ -28,3 +30,5 @@ constexpr void bubble_sort(T* const arr, const std::size_t size, const Compare c
 			break; // no elements were swapped
 	}
 }
+
+#endif // !BUBBLE_SORT_HPP

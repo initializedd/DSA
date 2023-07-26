@@ -1,6 +1,7 @@
-export module BinaryNode;
+#ifndef BINARY_NODE_HPP
+#define BINARY_NODE_HPP
 
-export template <typename T>
+template <typename T>
 struct BinaryNode
 {
 	T					data;
@@ -9,3 +10,5 @@ struct BinaryNode
 
 	BinaryNode() : data{}, left{}, right{} {}
 };
+
+#endif // !BINARY_NODE_HPP

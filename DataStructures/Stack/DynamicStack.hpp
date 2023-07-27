@@ -5,6 +5,7 @@
 #include <cstddef>
 #include <type_traits>
 #include <optional>
+#include <utility>
 
 template <typename T>
 class DynamicStack
@@ -21,11 +22,11 @@ public:
 	}
 
 	template <typename... Args>
-	DynamicStack(const Args&... args) requires(std::is_same_v<Args, T> && ...)
+	DynamicStack(Args&&... args) requires(std::is_same_v<Args, T> && ...)
 		: m_top{}
 		, m_size{}
 	{
-		(push({ args }), ...);
+		(push(std::forward<Args>(args)),...);
 	}
 
 	~DynamicStack()
@@ -33,7 +34,7 @@ public:
 		clear();
 	}
 
-	void push(const T& data)
+	void push(T&& data)
 	{
 		Node<T>* tmp = new Node<T>();
 		tmp->data = data;
@@ -88,3 +89,5 @@ public:
 		return m_size;
 	}
 };
+
+#endif // !DYNAMIC_STACK_HPP

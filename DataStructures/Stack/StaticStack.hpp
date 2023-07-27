@@ -10,7 +10,7 @@ class StaticStack
 {
 private:
 	T								m_array[N];
-	int								m_top;
+	std::int64_t					m_top;
 
 public:
 	StaticStack()
@@ -29,12 +29,11 @@ public:
 
 	void push(T data)
 	{
-		++m_top;
-
 		if (!full())
+		{
+			++m_top;
 			m_array[m_top] = data;
-		else
-			--m_top; // stack is already full
+		}
 	}
 
 	void pop() noexcept
@@ -77,7 +76,7 @@ public:
 		return N;
 	}
 
-	[[nodiscard]] T& operator[](std::size_t index) const
+	[[nodiscard]] T operator[](std::size_t index) const
 	{
 		return m_array[index];
 	}

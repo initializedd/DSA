@@ -57,7 +57,7 @@ TEST_CASE("FixedArray .size()")
 	}
 }
 
-TEST_CASE("FixedArray [] Insertion")
+TEST_CASE("FixedArray []")
 {
 	FixedArray<int, 3> arr;
 	arr[0] = -4;

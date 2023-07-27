@@ -106,7 +106,7 @@ public:
 		return N;
 	}
 
-	[[nodiscard]] T& operator[](std::size_t index) const
+	[[nodiscard]] T operator[](std::size_t index) const
 	{
 		return m_array[m_head + index];
 	}

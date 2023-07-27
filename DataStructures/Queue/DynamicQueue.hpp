@@ -115,3 +115,5 @@ public:
 		return m_size;
 	}
 };
+
+#endif // !DYNAMIC_QUEUE_HPP

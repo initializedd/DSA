@@ -11,6 +11,6 @@ add_executable(${PROJECT_NAME})
 target_sources(${PROJECT_NAME} PRIVATE
     "Tests/DataStructures/Array/FixedArrayTest.cpp"
     "Tests/DataStructures/HashTable/HashTableTest.cpp"
- "Tests/DataStructures/LinkedList/SingleLinkedListTest.cpp")
+ "Tests/DataStructures/LinkedList/SingleLinkedListTest.cpp" "Tests/DataStructures/Stack/StaticStackTest.cpp")
 
 target_link_libraries(${PROJECT_NAME} Catch2::Catch2WithMain)

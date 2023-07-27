@@ -14,17 +14,23 @@ TEST_CASE("StaticStack .push()")
 {
 	StaticStack<int, 3> stack;
 
+	CHECK_FALSE(stack.top().has_value());
+	CHECK(stack.empty());
+
 	stack.push(20);
 
 	REQUIRE(stack.top().value() == 20);
+	REQUIRE(stack.size() == 1);
 
 	stack.push(-300);
 
 	REQUIRE(stack.top().value() == -300);
+	REQUIRE(stack.size() == 2);
 
 	stack.push(25554);
 
 	REQUIRE(stack.top().value() == 25554);
+	REQUIRE(stack.size() == 3);
 
 	stack.push(555); // stack is already full, data is not pushed
 
@@ -34,25 +40,30 @@ TEST_CASE("StaticStack .push()")
 
 TEST_CASE("StaticStack .pop()")
 {
-	StaticStack<int, 3> stack;
+	StaticStack<int, 3> stack {5, 4, 6 };
 
-	stack.pop(); // stack is already empty, data is not pushed
-
-	CHECK(stack.empty());
-
-	stack = { 5, 4 ,6 };
+	REQUIRE(stack.top().value() == 6);
+	REQUIRE(stack.size() == 3);
 
 	stack.pop();
 
 	REQUIRE(stack.top().value() == 4);
+	REQUIRE(stack.size() == 2);
 
 	stack.pop();
 
 	REQUIRE(stack.top().value() == 5);
+	REQUIRE(stack.size() == 1);
 
 	stack.pop();
 
 	CHECK(stack.empty());
+	REQUIRE(stack.size() == 0);
+
+	stack.pop(); // stack is already empty, nothing happens
+
+	CHECK(stack.empty());
+	REQUIRE(stack.size() == 0);
 }
 
 TEST_CASE("StaticStack .empty()")
@@ -130,6 +141,10 @@ TEST_CASE("StaticStack .clear()")
 TEST_CASE("StaticStack .size()")
 {
 	StaticStack<int, 3> stack;
+
+	REQUIRE(stack.size() == 0);
+
+	stack.pop();
 
 	REQUIRE(stack.size() == 0);
 

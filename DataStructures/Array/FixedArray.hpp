@@ -3,6 +3,7 @@
 
 #include <cstdlib>
 #include <type_traits>
+#include <utility>
 
 template <typename T, const std::size_t N>
 class FixedArray
@@ -17,13 +18,13 @@ public:
 	}
 
 	template <typename... Args>
-	FixedArray(const Args&... args) requires((std::is_same_v<Args, T> && ...) && sizeof...(Args) == N)
+	FixedArray(Args&&... args) requires((std::is_same_v<Args, T> && ...) && sizeof...(Args) == N)
 	{
 		m_data = static_cast<T*>(std::malloc(sizeof(T) * N));
 
         std::size_t index = 0;
 
-		(new(m_data + index++) T{ args }, ...);			
+		(new(m_data + index++) T(std::forward<Args>(args)), ...);			
 	}
 
 	~FixedArray()
@@ -32,10 +33,10 @@ public:
 			std::free(m_data);
 	}
 
-	void insert(const T& data, std::size_t index)
+	void insert(T&& data, std::size_t index)
 	{
 		if (index < N)
-			new(m_data + index) T{ data };
+			new(m_data + index) T(std::forward<T>(data));
 	}
 
 	[[nodiscard]] T front() const noexcept

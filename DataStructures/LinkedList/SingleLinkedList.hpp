@@ -4,6 +4,7 @@
 #include "../Node/Node.hpp"
 #include <cstddef>
 #include <type_traits>
+#include <utility>
 
 template <typename T>
 class SingleLinkedList
@@ -20,11 +21,11 @@ public:
 	}
 
 	template <typename... Args>
-	SingleLinkedList(const Args&... args) requires(std::is_same_v<Args, T> && ...)
+	SingleLinkedList(Args&&... args) requires(std::is_same_v<Args, T> && ...)
 		: m_head{}
 		, m_size{}
 	{
-		(push_front({ args }), ...);
+		(push_front(std::forward<Args>(args)), ...);
 	}
 
 	~SingleLinkedList()
@@ -32,7 +33,7 @@ public:
 		clear();
 	}
 
-	void push_front(const T& data)
+	void push_front(T&& data)
 	{
 		Node<T>* tmp = new Node<T>();
 		tmp->data = data;
@@ -50,7 +51,7 @@ public:
 		++m_size;
 	}
 
-	void push_back(const T& data)
+	void push_back(T&& data)
 	{
 		Node<T>* tmp = new Node<T>();
 		tmp->data = data;
@@ -131,7 +132,7 @@ public:
 		return m_head->data;
 	}
 
-	void insert(const T& data, std::size_t index)
+	void insert(T&& data, std::size_t index)
 	{
 		if (index > m_size)
 			return; // invalid index

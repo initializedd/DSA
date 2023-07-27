@@ -4,6 +4,7 @@
 #include <cstddef>
 #include <type_traits>
 #include <optional>
+#include <utility>
 
 template <typename T, const std::size_t N>
 class StaticQueue
@@ -22,15 +23,15 @@ public:
 	}
 
 	template <typename... Args>
-	StaticQueue(const Args&... args) requires((std::is_same_v<Args, T> && ...) && sizeof...(Args) <= N)
+	StaticQueue(Args&&... args) requires((std::is_same_v<Args, T> && ...) && sizeof...(Args) <= N)
 		: m_array{}
 		, m_head{-1}
 		, m_tail{-1}
 	{
-		(push({ args }), ...);
+		(push(std::forward<Args>(args)), ...);
 	}
 
-	void push(const T& data)
+	void push(T&& data)
 	{
 		if (full())
 			return;

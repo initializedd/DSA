@@ -4,6 +4,7 @@
 #include "../Node/Node.hpp"
 #include <cstddef>
 #include <optional>
+#include <utility>
 
 template <typename T>
 class DynamicQueue
@@ -22,12 +23,12 @@ public:
 	}
 
 	template <typename... Args>
-	DynamicQueue(const Args&... args) requires(std::is_same_v<Args, T> && ...)
+	DynamicQueue(Args&&... args) requires(std::is_same_v<Args, T> && ...)
 		: m_head{}
 		, m_tail{}
 		, m_size{}
 	{
-		(push({ args }), ...);
+		(push(std::forward<Args>(args)), ...);
 	}
 
 	~DynamicQueue()
@@ -35,7 +36,7 @@ public:
 		clear();
 	}
 
-	void push(const T& data)
+	void push(T&& data)
 	{
 		Node<T>* tmp = new Node<T>();
 		tmp->data = data;

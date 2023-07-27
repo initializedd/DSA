@@ -5,6 +5,7 @@
 #include <cstddef>
 #include <type_traits>
 #include <optional>
+#include <utility>
 
 template <typename T>
 class BinarySearchTree
@@ -33,11 +34,11 @@ public:
 	}
 
 	template <typename... Args>
-	BinarySearchTree(const Args&... args) requires(std::is_same_v<Args, T> && ...)
+	BinarySearchTree(Args&&... args) requires(std::is_same_v<Args, T> && ...)
 		: m_root{}
 		, m_size{}
 	{
-		(insert({ args }), ...);
+		(insert(std::forward<Args>(args)), ...);
 	}
 
 	~BinarySearchTree()
@@ -45,7 +46,7 @@ public:
 		clear();
 	}
 
-	void insert(const T& data)
+	void insert(T&& data)
 	{
 		BinaryNode<T>* tmp = new BinaryNode<T>();
 		tmp->data = data;
@@ -91,7 +92,7 @@ public:
 		}
 	}
 
-	void remove(const T& data)
+	void remove(T&& data)
 	{
 		if (!m_root)
 			return;

@@ -4,6 +4,7 @@
 #include <cstddef>
 #include <type_traits>
 #include <optional>
+#include <utility>
 
 template <typename T, const std::size_t N>
 class StaticStack
@@ -20,14 +21,14 @@ public:
 	}
 
 	template <typename... Args>
-	StaticStack(const Args&... args) requires((std::is_same_v<Args, T> && ...) && sizeof...(Args) <= N)
+	StaticStack(Args&&... args) requires((std::is_same_v<Args, T> && ...) && sizeof...(Args) <= N)
 		: m_array{}
 		, m_top{-1}
 	{
-		(push({ args }), ...);
+		(push(std::forward<Args>(args)), ...);
 	}
 
-	void push(T data)
+	void push(T&& data)
 	{
 		if (!full())
 		{

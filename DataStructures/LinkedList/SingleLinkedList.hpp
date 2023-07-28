@@ -25,7 +25,7 @@ public:
 		: m_head{}
 		, m_size{}
 	{
-		(push_front(std::forward<Args>(args)), ...);
+		(push_back(std::forward<Args>(args)), ...);
 	}
 
 	~SingleLinkedList()
@@ -134,11 +134,13 @@ public:
 
 	void insert(T&& data, std::size_t index)
 	{
-		if (index > m_size)
+		if (index > m_size || index < 0)
 			return; // invalid index
 
 		Node<T>* tmp = new Node<T>();
 		tmp->data = data;
+
+		++m_size;
 
 		if (index == 0)
 		{
@@ -160,7 +162,6 @@ public:
 		tmp->link = ptr->link;
 
 		ptr->link = tmp;
-		++m_size;
 	}
 
 	void clear()

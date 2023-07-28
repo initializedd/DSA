@@ -292,3 +292,5 @@ public:
 		return m_size;
 	}
 };
+
+#endif // !BINARY_SEARCH_TREE_HPP

@@ -132,10 +132,18 @@ TEST_CASE("StaticStack .clear()")
 	stack.clear();
 
 	CHECK(stack.empty());
+	
+	stack.clear();
+
+	CHECK(stack.empty());
 
 	stack.push(77);
 
 	CHECK_FALSE(stack.empty());
+
+	stack.clear();
+
+	CHECK(stack.empty());
 }
 
 TEST_CASE("StaticStack .size()")
@@ -159,6 +167,10 @@ TEST_CASE("StaticStack .size()")
 	stack.push(-999);
 
 	REQUIRE(stack.size() == 2);
+
+	stack.clear();
+
+	REQUIRE(stack.size() == 0);
 }
 
 TEST_CASE("StaticStack .capacity()")

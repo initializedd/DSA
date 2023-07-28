@@ -156,9 +156,17 @@ TEST_CASE("StaticQueue .clear()")
 
 	CHECK(queue.empty());
 
+	queue.clear();
+
+	CHECK(queue.empty());
+
 	queue.push(77);
 
 	CHECK_FALSE(queue.empty());
+
+	queue.clear();
+
+	CHECK(queue.empty());
 }
 
 TEST_CASE("StaticQueue .size()")

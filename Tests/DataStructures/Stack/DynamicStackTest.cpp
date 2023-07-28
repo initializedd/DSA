@@ -115,9 +115,17 @@ TEST_CASE("DynamicStack .clear()")
 
 	CHECK(stack.empty());
 
+	stack.clear();
+
+	CHECK(stack.empty());
+
 	stack.push(77);
 
 	CHECK_FALSE(stack.empty());
+
+	stack.clear();
+
+	CHECK(stack.empty());
 }
 
 TEST_CASE("DynamicStack .size()")
@@ -142,4 +150,8 @@ TEST_CASE("DynamicStack .size()")
 	stack.pop();
 
 	REQUIRE(stack.size() == 2);
+
+	stack.clear();
+
+	REQUIRE(stack.size() == 0);
 }

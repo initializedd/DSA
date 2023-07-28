@@ -138,9 +138,17 @@ TEST_CASE("DynamicQueue .clear()")
 
 	CHECK(queue.empty());
 
+	queue.clear();
+
+	CHECK(queue.empty());
+
 	queue.push(666);
 
 	CHECK_FALSE(queue.empty());
+
+	queue.clear();
+
+	CHECK(queue.empty());
 }
 
 TEST_CASE("DynamicQueue .size()")

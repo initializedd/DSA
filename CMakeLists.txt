@@ -14,6 +14,9 @@ target_sources(${PROJECT_NAME} PRIVATE
     "Tests/DataStructures/LinkedList/SingleLinkedListTest.cpp" 
     "Tests/DataStructures/Stack/StaticStackTest.cpp"
     "Tests/DataStructures/Stack/DynamicStackTest.cpp"
+    "Tests/DataStructures/Queue/StaticQueueTest.cpp"
+    "Tests/DataStructures/Queue/DynamicQueueTest.cpp"
+    "Tests/DataStructures/Tree/BinarySearchTreeTest.cpp"
 )
 
 target_link_libraries(${PROJECT_NAME} Catch2::Catch2WithMain)

@@ -1,62 +1,86 @@
 #ifndef FIXED_ARRAY_HPP
 #define FIXED_ARRAY_HPP
 
-#include <cstdlib>
+#include <cstddef>
 #include <type_traits>
+#include <memory>
 #include <utility>
 
 template <typename T, const std::size_t N>
 class FixedArray
 {
 private:
-	T*				m_data;
+	alignas(std::alignment_of<T>) std::byte			m_storage[sizeof(T) * N];
+
+	[[nodiscard]] constexpr auto elem_ptr(const std::size_t index) noexcept -> T* 
+	{
+		return reinterpret_cast<T*>(&m_storage) + index;
+	}
+
+	[[nodiscard]] constexpr auto elem_ptr(const std::size_t index) const noexcept -> const T* 
+	{
+		return reinterpret_cast<const T*>(&m_storage) + index;
+	}
 
 public:
-	FixedArray()
-	{
-		m_data = static_cast<T*>(std::malloc(sizeof(T) * N));
-	}
+	consteval const FixedArray() noexcept = default;
 
 	template <typename... Args>
 	FixedArray(Args&&... args) requires((std::is_same_v<Args, T> && ...) && sizeof...(Args) == N)
 	{
-		m_data = static_cast<T*>(std::malloc(sizeof(T) * N));
+		std::size_t index = 0;
 
-        std::size_t index = 0;
-
-		(new(m_data + index++) T(std::forward<Args>(args)), ...);			
+		(std::construct_at((elem_ptr(index++)), std::forward<Args>(args)), ...);
 	}
 
 	~FixedArray()
 	{
-		if (m_data)
-			std::free(m_data);
+		if constexpr (!std::is_trivially_destructible_v<T>)
+		{
+			for (std::size_t i = 0; i < N; ++i)
+				std::destroy_at(elem_ptr(i));
+		}
 	}
 
 	void insert(T&& data, std::size_t index)
 	{
 		if (index < N)
-			new(m_data + index) T(std::forward<T>(data));
+			std::construct_at(elem_ptr(index), std::forward<T>(data));
 	}
 
-	[[nodiscard]] T front() const noexcept
+	[[nodiscard]] constexpr auto front() noexcept -> T& 
+	{ 
+		return *elem_ptr(0); 
+	}
+
+	[[nodiscard]] constexpr auto front() const noexcept -> const T& 
+	{ 
+		return *elem_ptr(0); 
+	}
+
+	[[nodiscard]] constexpr auto back() noexcept -> T&
 	{
-		return *m_data;
+		return *elem_ptr(N - 1);
 	}
 
-	[[nodiscard]] T back() const noexcept
+	[[nodiscard]] constexpr auto back() const noexcept -> const T&
 	{
-		return *(m_data + N - 1);
+		return *elem_ptr(N - 1);
 	}
 
-	[[nodiscard]] consteval std::size_t size() const noexcept
+	[[nodiscard]] consteval auto size() const noexcept -> const std::size_t
 	{
 		return N;
 	}
 
-	[[nodiscard]] T& operator[](std::size_t index) const
+	[[nodiscard]] constexpr T& operator[](const std::size_t index)
 	{
-		return *(m_data + index);
+		return *elem_ptr(index);
+	}
+
+	[[nodiscard]] constexpr T& operator[](const std::size_t index) const
+	{
+		return *elem_ptr(index);
 	}
 };
 

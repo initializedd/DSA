@@ -17,16 +17,16 @@ private:
 		return reinterpret_cast<T*>(&m_storage) + index;
 	}
 
-	[[nodiscard]] constexpr auto elem_ptr(const std::size_t index) const noexcept -> const T* 
+	[[nodiscard]] constexpr auto elem_ptr(const std::size_t index) const noexcept -> T* 
 	{
 		return reinterpret_cast<const T*>(&m_storage) + index;
 	}
 
 public:
-	consteval const FixedArray() noexcept = default;
+	FixedArray() = default;
 
 	template <typename... Args>
-	FixedArray(Args&&... args) requires((std::is_same_v<Args, T> && ...) && sizeof...(Args) == N)
+	FixedArray(Args&&... args) requires((std::is_convertible_v<Args, T> && ...) && sizeof...(Args) == N)
 	{
 		std::size_t index = 0;
 
@@ -53,7 +53,7 @@ public:
 		return *elem_ptr(0); 
 	}
 
-	[[nodiscard]] constexpr auto front() const noexcept -> const T& 
+	[[nodiscard]] constexpr auto front() const noexcept -> T& 
 	{ 
 		return *elem_ptr(0); 
 	}
@@ -63,22 +63,22 @@ public:
 		return *elem_ptr(N - 1);
 	}
 
-	[[nodiscard]] constexpr auto back() const noexcept -> const T&
+	[[nodiscard]] constexpr auto back() const noexcept -> T&
 	{
 		return *elem_ptr(N - 1);
 	}
 
-	[[nodiscard]] consteval auto size() const noexcept -> const std::size_t
+	[[nodiscard]] consteval auto size() const noexcept -> std::size_t
 	{
 		return N;
 	}
 
-	[[nodiscard]] constexpr T& operator[](const std::size_t index)
+	[[nodiscard]] constexpr auto operator[](const std::size_t index) -> T&
 	{
 		return *elem_ptr(index);
 	}
 
-	[[nodiscard]] constexpr T& operator[](const std::size_t index) const
+	[[nodiscard]] constexpr auto operator[](const std::size_t index) const -> T&
 	{
 		return *elem_ptr(index);
 	}

@@ -26,7 +26,6 @@ struct Adjacency
 	Vertex<T>*		m_dst;
 	int				m_weight;
 
-	Adjacency() = default;
 	Adjacency(Vertex<T>* dst, int weight) : m_dst{ dst }, m_weight{ weight } {}
 };
 
@@ -73,6 +72,7 @@ public:
 			}
 		}
 
+		delete vertex;
 		m_adj_list.erase(key);
 	}
 
@@ -100,12 +100,17 @@ public:
 		}
 	}
 
-	[[nodiscard]] auto at(const int key) const noexcept -> T
+	[[nodiscard]] auto at(const int key) noexcept -> T&
 	{
 		return m_adj_list.at(key)->m_data;
 	}
 
-	[[nodiscard]] auto count(const int key) const noexcept -> const std::size_t
+	[[nodiscard]] auto at(const int key) const noexcept -> T&
+	{
+		return m_adj_list.at(key)->m_data;
+	}
+
+	[[nodiscard]] auto count(const int key) const noexcept -> std::size_t
 	{
 		return m_adj_list.count(key);
 	}
@@ -133,12 +138,22 @@ public:
 		m_adj_list.clear();
 	}
 
-	[[nodiscard]] auto size() const noexcept -> const std::size_t
+	[[nodiscard]] auto size() noexcept -> std::size_t
 	{
 		return m_adj_list.size();
 	}
 
-	[[nodiscard]] auto max_size() const noexcept -> const std::size_t
+	[[nodiscard]] auto size() const noexcept -> std::size_t
+	{
+		return m_adj_list.size();
+	}
+
+	[[nodiscard]] auto max_size() noexcept -> std::size_t
+	{
+		return m_adj_list.max_size();
+	}
+
+	[[nodiscard]] auto max_size() const noexcept -> std::size_t
 	{
 		return m_adj_list.max_size();
 	}

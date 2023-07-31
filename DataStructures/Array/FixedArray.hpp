@@ -53,7 +53,7 @@ public:
 		return *elem_ptr(0); 
 	}
 
-	[[nodiscard]] constexpr auto front() const noexcept -> T& 
+	[[nodiscard]] constexpr auto front() const noexcept -> const T& 
 	{ 
 		return *elem_ptr(0); 
 	}
@@ -63,12 +63,12 @@ public:
 		return *elem_ptr(N - 1);
 	}
 
-	[[nodiscard]] constexpr auto back() const noexcept -> T&
+	[[nodiscard]] constexpr auto back() const noexcept -> const T&
 	{
 		return *elem_ptr(N - 1);
 	}
 
-	[[nodiscard]] consteval auto size() const noexcept -> std::size_t
+	[[nodiscard]] consteval auto size() const noexcept -> const std::size_t
 	{
 		return N;
 	}
@@ -78,7 +78,7 @@ public:
 		return *elem_ptr(index);
 	}
 
-	[[nodiscard]] constexpr auto operator[](const std::size_t index) const -> T&
+	[[nodiscard]] constexpr auto operator[](const std::size_t index) const -> const T&
 	{
 		return *elem_ptr(index);
 	}

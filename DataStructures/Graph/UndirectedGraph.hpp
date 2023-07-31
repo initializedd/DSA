@@ -105,12 +105,12 @@ public:
 		return m_adj_list.at(key)->m_data;
 	}
 
-	[[nodiscard]] auto at(const int key) const noexcept -> T&
+	[[nodiscard]] auto at(const int key) const noexcept -> const T&
 	{
 		return m_adj_list.at(key)->m_data;
 	}
 
-	[[nodiscard]] auto count(const int key) const noexcept -> std::size_t
+	[[nodiscard]] auto count(const int key) const noexcept -> const std::size_t
 	{
 		return m_adj_list.count(key);
 	}
@@ -120,12 +120,12 @@ public:
 		return m_adj_list.find(key);
 	}
 
-	[[nodiscard]] auto contains(const int key) const noexcept -> bool
+	[[nodiscard]] auto contains(const int key) const noexcept -> const bool
 	{
 		return m_adj_list.contains(key);
 	}
 
-	[[nodiscard]] auto empty() const noexcept -> bool
+	[[nodiscard]] auto empty() const noexcept -> const bool
 	{
 		return m_adj_list.empty();
 	}
@@ -138,22 +138,12 @@ public:
 		m_adj_list.clear();
 	}
 
-	[[nodiscard]] auto size() noexcept -> std::size_t
+	[[nodiscard]] auto size() const noexcept -> const std::size_t
 	{
 		return m_adj_list.size();
 	}
 
-	[[nodiscard]] auto size() const noexcept -> std::size_t
-	{
-		return m_adj_list.size();
-	}
-
-	[[nodiscard]] auto max_size() noexcept -> std::size_t
-	{
-		return m_adj_list.max_size();
-	}
-
-	[[nodiscard]] auto max_size() const noexcept -> std::size_t
+	[[nodiscard]] auto max_size() const noexcept -> const std::size_t
 	{
 		return m_adj_list.max_size();
 	}

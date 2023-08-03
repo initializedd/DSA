@@ -5,7 +5,7 @@
 #include <optional>
 
 template <typename T, const std::size_t N>
-const std::optional<const std::size_t> binary_search(const T (&arr)[N], const T value)
+[[nodiscard]] auto binary_search(const T (&arr)[N], const T value) noexcept -> const std::optional<const std::size_t>
 {
     std::size_t left_index = 0;
     std::size_t right_index = N - 1;

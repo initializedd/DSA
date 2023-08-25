@@ -128,6 +128,8 @@ public:
 			if (bucket->data.first == pair.first)
 			{
 				bucket->data.second = pair.second;
+				delete tmp;
+
 				return; // overwrite data if same key
 			}
 
